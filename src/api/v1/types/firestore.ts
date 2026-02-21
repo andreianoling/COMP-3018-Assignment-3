@@ -4,5 +4,6 @@ export type FirestoreDataTypes =
     | string
     | number
     | boolean
+    | null
     | Date
     | FieldValue;
