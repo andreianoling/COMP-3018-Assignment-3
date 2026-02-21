@@ -5,14 +5,22 @@ export const postSchemas = {
     // POST /posts - Create new post
     create: {
         body: Joi.object({
-            userId: Joi.string().required().messages({
-                "any.required": "User ID is required",
-                "string.empty": "User ID cannot be empty",
+            name: Joi.string().required().messages({
+                "any.required": "Name is required",
+                "string.empty": "Name cannot be empty",
             }),
-            content: Joi.string().required().messages({
-                "any.required": "Content is required",
-                "string.empty": "Content cannot be empty",
+            date: Joi.string().required().messages({
+                "any.required": "Date is required",
+                "string.empty": "Date cannot be empty",
             }),
+            capacity: Joi.number().integer().min(1).required().messages({
+                "any.required": "Capacity is required",
+                "number.base": "Capacity must be a number",
+                "number.min": "Capacity must be at least 1",
+            }),
+            registrationCount: Joi.number().integer().min(0).optional(),
+            status: Joi.string().optional(),
+            category: Joi.string().optional(),
         }),
     },
 
@@ -38,9 +46,14 @@ export const postSchemas = {
             }),
         }),
         body: Joi.object({
-            content: Joi.string().optional().messages({
-                "string.empty": "Content cannot be empty",
-            }),
+            name: Joi.string().optional(),
+            date: Joi.string().optional(),
+            capacity: Joi.number().integer().min(1).optional(),
+            registrationCount: Joi.number().integer().min(0).optional(),
+            status: Joi.string().optional(),
+            category: Joi.string().optional(),
+        }).min(1).messages({
+            "object.min": "At least one field must be provided to update",
         }),
     },
 

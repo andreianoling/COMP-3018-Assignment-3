@@ -10,8 +10,8 @@ export const createPostHandler = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const {userId, content} = req.body;
-        const postData = {userId, content};
+        const { name, date, capacity, registrationCount, status, category } = req.body;
+        const postData = { name, date, capacity, registrationCount, status, category };
 
         const newPost = await postService.createPost(postData);
 
@@ -59,12 +59,12 @@ export const updatePostHandler = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const {id} = req.params;
-        const {userId, content} = req.body;
+        const { id } = req.params;
+        const { name, date, capacity, registrationCount, status, category } = req.body;
 
-        const updatePostData = {userId, content};
+        const updatePostData = { name, date, capacity, registrationCount, status, category };
 
-        const updatedPost= await postService.updatePost(id as string, updatePostData);
+        const updatedPost = await postService.updatePost(id as string, updatePostData);
 
         res.status(HTTP_STATUS.OK).json(successResponse({updatedPost}, "Post updated"));
     } catch (error: unknown) {

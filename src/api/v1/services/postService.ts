@@ -1,12 +1,17 @@
 import { Post } from "../models/postModel";
 import * as firestoreRepository from "../repositories/firestoreRepository";
-import { postSchemas } from "../validation/postSchemas";
-import { validateRequest } from "../middleware/validate";
 
 const COLLECTION = "posts";
 
 // creating a new post
-export const createPost = async (postData: {userId: string; content: string}): Promise<Post> => {
+export const createPost = async (postData: {
+    name: string;
+    date: Date;
+    capacity: number;
+    registrationCount?: number;
+    status?: string;
+    category?: string;
+}): Promise<Post> => {
     try {
         const newPostData = {
             ... postData,
@@ -64,22 +69,28 @@ export const getPostById = async (id: string): Promise<Post> => {
 };
 
 // updating a post
-export const updatePost = async (id: string, postData: {userId: string, content: string}): Promise<Post> => {
+export const updatePost = async (id: string, postData: {
+    name?: string;
+    date?: Date;
+    capacity?: number;
+    registrationCount?: number;
+    status?: string;
+    category?: string;
+}): Promise<Post> => {
     try {
         const updatedPost: Partial<Post> = {};
 
-        if(postData.userId !== undefined) {
-            updatedPost.userId = postData.userId;
-        }
-
-        if(postData.content !== undefined) {
-            updatedPost.content = postData.content;
-        }
+        if (postData.name !== undefined) updatedPost.name = postData.name;
+        if (postData.date !== undefined) updatedPost.date = postData.date;
+        if (postData.capacity !== undefined) updatedPost.capacity = postData.capacity;
+        if (postData.registrationCount !== undefined) updatedPost.registrationCount = postData.registrationCount;
+        if (postData.status !== undefined) updatedPost.status = postData.status;
+        if (postData.category !== undefined) updatedPost.category = postData.category;
 
         if (Object.keys(updatedPost).length === 0) {
             throw new Error("No fields provided to update");
         }
-        
+
         updatedPost.updatedAt = new Date();
 
         // update the document 
