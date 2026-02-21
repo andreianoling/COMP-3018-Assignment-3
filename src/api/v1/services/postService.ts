@@ -14,7 +14,10 @@ export const createPost = async (postData: {
 }): Promise<Post> => {
     try {
         const newPostData = {
-            ... postData,
+            registrationCount: 0,
+            status: "active",
+            category: "general",
+            ...postData,
             createdAt: new Date(),
             updatedAt: new Date(),
         }
