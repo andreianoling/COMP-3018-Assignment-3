@@ -37,8 +37,8 @@ export const postSchemas = {
     getById: {
         params: Joi.object({
             id: Joi.string().required().messages({
-                "any.required": "Post ID is required",
-                "string.empty": "Post ID cannot be empty",
+                "any.required": "Event ID is required",
+                "string.empty": "Event ID cannot be empty",
             }),
         }),
         query: Joi.object({
@@ -50,8 +50,8 @@ export const postSchemas = {
     update: {
         params: Joi.object({
             id: Joi.string().required().messages({
-                "any.required": "Post ID is required",
-                "string.empty": "Post ID cannot be empty",
+                "any.required": "Event ID is required",
+                "string.empty": "Event ID cannot be empty",
             }),
         }),
         body: Joi.object({
@@ -70,8 +70,8 @@ export const postSchemas = {
     delete: {
         params: Joi.object({
             id: Joi.string().required().messages({
-                "any.required": "Post ID is required",
-                "string.empty": "Post ID cannot be empty",
+                "any.required": "Event ID is required",
+                "string.empty": "Event ID cannot be empty",
             }),
         }),
     },

@@ -6,12 +6,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use("/api/v1/posts", router);
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+app.use("/api/v1/events", router);
 
 // Use Morgan for HTTP request logging
 app.use(morgan("combined"));

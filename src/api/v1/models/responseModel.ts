@@ -1,18 +1,18 @@
 export interface ApiResponse<T> {
-    status: string;
-    data?: T;
     message?: string;
+    count?: number;
+    data?: T;
     error?: string;
-    code?: string;
 }
 
 export const successResponse = <T>(
     data?: T,
-    message?: string
+    message?: string,
+    count?: number
 ): ApiResponse<T> => ({
-    status: "success",
-    data,
     message,
+    ...(count !== undefined && { count }),
+    data,
 });
 
 export interface CreatePostResponse {

@@ -15,7 +15,7 @@ export const createPostHandler = async (
 
         const newPost = await postService.createPost(postData);
 
-        res.status(HTTP_STATUS.CREATED).json(successResponse({newPost}, "Post created successfully"));
+        res.status(HTTP_STATUS.CREATED).json(successResponse({newPost}, "Event created"));
     } catch (error: unknown) {
         next(error);
     }
@@ -30,7 +30,7 @@ export const getAllPostsHandler = async (
     try {
         const posts = await postService.getAllPosts();
 
-        res.status(HTTP_STATUS.OK).json(successResponse({posts}, "Posts retrieved successfully"));
+        res.status(HTTP_STATUS.OK).json(successResponse({ posts }, "Events retrieved", posts.length));
     } catch (error: unknown) {
         next(error);
     }
@@ -46,7 +46,7 @@ export const getPostByIdHandler = async (
         const { id } = req.params;
         const post = await postService.getPostById(id as string);
 
-        res.status(HTTP_STATUS.OK).json(successResponse({post}, "Post retrieved successfully"));
+        res.status(HTTP_STATUS.OK).json(successResponse({post}, "Event Retreived"));
     } catch (error: unknown) {
         next(error);
     }
@@ -66,7 +66,7 @@ export const updatePostHandler = async (
 
         const updatedPost = await postService.updatePost(id as string, updatePostData);
 
-        res.status(HTTP_STATUS.OK).json(successResponse({updatedPost}, "Post updated"));
+        res.status(HTTP_STATUS.OK).json(successResponse({updatedPost}, "Event updated"));
     } catch (error: unknown) {
         next(error);
     }
