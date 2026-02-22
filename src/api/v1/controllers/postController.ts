@@ -83,7 +83,7 @@ export const deletePostHandler = async (
         const {id} = req.params;
         await postService.deletePost(id as string);
 
-        res.status(HTTP_STATUS.OK).json(successResponse("Post deleted"));
+        res.status(HTTP_STATUS.OK).json(successResponse(undefined,"Post deleted"));
     } catch (error: unknown) {
         next(error);
     }

@@ -8,7 +8,7 @@ export interface ApiResponse<T> {
 export const successResponse = <T>(
     data?: T,
     message?: string,
-    count?: number
+    count?: number,
 ): ApiResponse<T> => ({
     message,
     ...(count !== undefined && { count }),

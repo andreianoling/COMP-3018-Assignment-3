@@ -17,12 +17,31 @@ const convertTimestamps = (data: Record<string, unknown>): Record<string, unknow
 
 export const createDocument = async <T>(
     collectionName: string,
-    data: Partial<T>
+    data: Partial<T>,
+    idCount?: string
 ): Promise<string> => {
     try {
-        let docRef: FirebaseFirestore.DocumentReference;
-        docRef = await db.collection(collectionName).add(data);
+        if (idCount) {
+            // Use a transaction to generate new id based on count
+            const counterRef = db.collection("counters").doc(collectionName);
 
+            const generateId = await db.runTransaction(async (transaction) => {
+                const getCount = await transaction.get(counterRef);
+                const currentCount: number = getCount.exists ? (getCount.data()!.count as number) : 0;
+                const newCount = currentCount + 1;
+                const newId = `${idCount}${String(newCount).padStart(6, "0")}`;0
+
+                transaction.set(counterRef, { count: newCount });
+                transaction.set(db.collection(collectionName).doc(newId), data as FirebaseFirestore.DocumentData);
+
+                return newId;
+            });
+
+            return generateId;
+        }
+
+        // Default: let Firestore auto-generate the ID
+        const docRef = await db.collection(collectionName).add(data);
         return docRef.id;
     } catch (error: unknown) {
         const errorMessage =

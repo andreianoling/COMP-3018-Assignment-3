@@ -22,7 +22,7 @@ export const createPost = async (postData: {
             updatedAt: new Date(),
         }
 
-        const id = await firestoreRepository.createDocument<Post>(COLLECTION, newPostData);
+        const id = await firestoreRepository.createDocument<Post>(COLLECTION, newPostData, "evt_");
 
         return {id, ... newPostData} as Post;
        
