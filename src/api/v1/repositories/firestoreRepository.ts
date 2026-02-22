@@ -1,4 +1,19 @@
 import { db } from "../../../../config/firebaseConfig";
+import { Timestamp } from "firebase-admin/firestore";
+
+// Converts Firestore Timestamps to ISO
+const convertTimestamps = (data: Record<string, unknown>): Record<string, unknown> => {
+    const result: Record<string, unknown> = {};
+    for (const key of Object.keys(data)) {
+        const value = data[key];
+        if (value instanceof Timestamp) {
+            result[key] = value.toDate().toISOString();
+        } else {
+            result[key] = value;
+        }
+    }
+    return result;
+};
 
 export const createDocument = async <T>(
     collectionName: string,
@@ -22,7 +37,7 @@ export const getAllDocuments = async <T>(collectionName: string): Promise<T[]> =
     try {
         const snapshot = await db.collection(collectionName).get();
         
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as T));
+        return snapshot.docs.map(doc => ({ id: doc.id, ...convertTimestamps(doc.data() as Record<string, unknown>) } as T));
     
     } catch (error: unknown) {
         const errorMessage =
@@ -47,8 +62,8 @@ export const getDocById = async <T>(collectionName: string, id: string): Promise
 
         return { 
             id: snapshot.id,
-            ... (snapshot.data() as T)
-        };
+            ...convertTimestamps(snapshot.data() as Record<string, unknown>)
+        } as T;
 
     } catch (error: unknown) {
         const errorMessage =
