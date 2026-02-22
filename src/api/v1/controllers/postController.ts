@@ -48,7 +48,7 @@ export const getPostByIdHandler = async (
 
         res.status(HTTP_STATUS.OK).json(successResponse({post}, "Event Retreived"));
     } catch (error: unknown) {
-        next(error);
+        res.status(HTTP_STATUS.NOT_FOUND).json({ error: "Event not found" });
     }
 };
 
@@ -68,7 +68,7 @@ export const updatePostHandler = async (
 
         res.status(HTTP_STATUS.OK).json(successResponse({updatedPost}, "Event updated"));
     } catch (error: unknown) {
-        next(error);
+        res.status(HTTP_STATUS.NOT_FOUND).json({ error: "Event not found" });
     }
 };
 
@@ -85,6 +85,6 @@ export const deletePostHandler = async (
 
         res.status(HTTP_STATUS.OK).json(successResponse(undefined,"Post deleted"));
     } catch (error: unknown) {
-        next(error);
+        res.status(HTTP_STATUS.NOT_FOUND).json({ error: "Event not found" });
     }
 };
