@@ -66,4 +66,29 @@ describe("validateRequest Middleware", () => {
             "error": "Validation error: Body: \"date\" is required, Body: \"capacity\" is required",
         });
     });
+
+    it ("should return validation error for invalid capacity minimum", () => {
+        // Arrange
+        const testSchema = Joi.object({
+            name: Joi.string().required(),
+            date: Joi.date().required(),
+            capacity: Joi.number().integer().min(5).required(),
+        });
+        mockReq.body = {
+            name: "Test Event",
+            date: new Date(),
+            capacity: 1,
+        };
+
+        const middleware = validateRequest({ body: testSchema });
+
+        // Act
+        middleware(mockReq as Request, mockRes as Response, mockNext);
+
+        // Assert
+        expect(mockRes.status).toHaveBeenCalledWith(400);
+        expect(mockRes.json).toHaveBeenCalledWith({
+            "error": "Validation error: Body: \"capacity\" must be greater than or equal to 5",
+        });
+    });
 });
