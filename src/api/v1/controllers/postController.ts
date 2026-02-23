@@ -83,7 +83,7 @@ export const deletePostHandler = async (
         const {id} = req.params;
         await postService.deletePost(id as string);
 
-        res.status(HTTP_STATUS.OK).json(successResponse(undefined,"Post deleted"));
+        res.status(HTTP_STATUS.OK).json(successResponse(undefined,"Event deleted"));
     } catch (error: unknown) {
         res.status(HTTP_STATUS.NOT_FOUND).json({ error: "Event not found" });
     }
