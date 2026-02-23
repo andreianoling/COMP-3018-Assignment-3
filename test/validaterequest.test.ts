@@ -43,4 +43,27 @@ describe("validateRequest Middleware", () => {
         // Assert
         expect(mockNext).toHaveBeenCalled();
     });
+
+    it("should return validation error for missing required fields", () => {
+        // Arrange
+        const testSchema = Joi.object({
+            name: Joi.string().required(),
+            date: Joi.date().required(),
+            capacity: Joi.number().integer().required(),
+        });
+        mockReq.body = {
+            name: "Test Event",
+        };
+
+        const middleware = validateRequest({ body: testSchema });
+
+        // Act
+        middleware(mockReq as Request, mockRes as Response, mockNext);
+
+        // Assert
+        expect(mockRes.status).toHaveBeenCalledWith(400);
+        expect(mockRes.json).toHaveBeenCalledWith({
+            "error": "Validation error: Body: \"date\" is required, Body: \"capacity\" is required",
+        });
+    });
 });
