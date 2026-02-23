@@ -132,4 +132,16 @@ describe('postService', () => {
             expect(result).toEqual(mockUpdatedPost);
         });
     });
+
+    describe('deletePost', () => {
+        it('should delete a post successfully', async () => {
+            // Arrange
+            (firestoreRepository.deleteDocument as jest.Mock).mockResolvedValue(undefined);
+            // Act
+            await postService.deletePost('evt_123456');
+
+            // Assert
+            expect(firestoreRepository.deleteDocument).toHaveBeenCalledWith('posts', 'evt_123456');
+        });
+    });
 });
