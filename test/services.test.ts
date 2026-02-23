@@ -96,4 +96,40 @@ describe('postService', () => {
             expect(result).toEqual(mockPost);
         });
     });
+
+    describe('updatePost', () => {
+        it('should update a post successfully', async () => {
+            // Arrange
+            const mockUpdatedPost = {
+                id: 'evt_123456',
+                name: 'Updated Event',
+                date: new Date(),
+                capacity: 100,
+                registrationCount: 0,
+                status: 'active',
+                category: 'general',
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+
+            (firestoreRepository.updateDocument as jest.Mock).mockResolvedValue(undefined);
+            (firestoreRepository.getDocById as jest.Mock).mockResolvedValue(mockUpdatedPost);
+
+            // Act
+            const result = await postService.updatePost('evt_123456', {
+                capacity: 1000,
+            });
+
+            // Assert
+            expect(firestoreRepository.updateDocument).toHaveBeenCalledWith(
+                'posts',
+                'evt_123456',
+                expect.objectContaining({
+                    capacity: 1000,
+                    updatedAt: expect.any(Date),
+                })
+            );
+            expect(result).toEqual(mockUpdatedPost);
+        });
+    });
 });
