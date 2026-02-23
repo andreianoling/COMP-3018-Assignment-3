@@ -43,29 +43,57 @@ describe('postService', () => {
         });
     });
 
-        describe('getAllPosts', () => {
-            it('should retrieve all posts successfully', async () => {
-                // Arrange
-                const mockPosts = [
-                    {
-                        id: 'evt_123456',
-                        name: 'Test Event',
-                        date: new Date(),
-                        capacity: 100,
-                        registrationCount: 0,
-                        status: 'active',
-                        category: 'general',
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    }
-                ];
+    describe('getAllPosts', () => {
+        it('should retrieve all posts successfully', async () => {
+            // Arrange
+            const mockPosts = [
+                {
+                    id: 'evt_123456',
+                    name: 'Test Event',
+                    date: new Date(),
+                    capacity: 100,
+                    registrationCount: 0,
+                    status: 'active',
+                    category: 'general',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                }
+            ];
 
-                (firestoreRepository.getAllDocuments as jest.Mock).mockResolvedValue(mockPosts);
+            (firestoreRepository.getAllDocuments as jest.Mock).mockResolvedValue(mockPosts);
 
-                // Act
-                const result = await postService.getAllPosts();
+            // Act
+            const result = await postService.getAllPosts();
 
-                // Assert
-                expect(firestoreRepository.getAllDocuments).toHaveBeenCalledWith('posts');
-                expect(result).toEqual(mockPosts);
-            });
+            // Assert
+            expect(firestoreRepository.getAllDocuments).toHaveBeenCalledWith('posts');
+            expect(result).toEqual(mockPosts);
+        });
+    });
+
+    describe('getPostById', () => {
+        it('should retrieve a post by ID successfully', async () => {
+            // Arrange
+            const mockPost = {
+                id: 'evt_123456',
+                name: 'Test Event',
+                date: new Date(),
+                capacity: 100,
+                registrationCount: 0,
+                status: 'active',
+                category: 'general',
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+
+            (firestoreRepository.getDocById as jest.Mock).mockResolvedValue(mockPost);
+
+            // Act
+            const result = await postService.getPostById('evt_123456');
+
+            // Assert
+            expect(firestoreRepository.getDocById).toHaveBeenCalledWith('posts', 'evt_123456');
+            expect(result).toEqual(mockPost);
+        });
+    });
+});
