@@ -63,7 +63,7 @@ describe("validateRequest Middleware", () => {
         // Assert
         expect(mockRes.status).toHaveBeenCalledWith(400);
         expect(mockRes.json).toHaveBeenCalledWith({
-            "error": "Validation error: Body: \"date\" is required, Body: \"capacity\" is required",
+            "error": "Validation error: \"date\" is required, \"capacity\" is required",
         });
     });
 
@@ -88,7 +88,7 @@ describe("validateRequest Middleware", () => {
         // Assert
         expect(mockRes.status).toHaveBeenCalledWith(400);
         expect(mockRes.json).toHaveBeenCalledWith({
-            "error": "Validation error: Body: \"capacity\" must be greater than or equal to 5",
+            "error": "Validation error: \"capacity\" must be greater than or equal to 5",
         });
     });
 });
