@@ -1,9 +1,6 @@
 import express from "express";
 import router from "./api/v1/routes/postRoutes";
 import morgan from "morgan";
-import dotenv from "dotenv";
-
-dotenv.config
 
 const app = express();
 
