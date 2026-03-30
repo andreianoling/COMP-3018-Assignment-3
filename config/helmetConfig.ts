@@ -7,24 +7,17 @@ export const helmetConfig = () => {
     const baseConfig = {
         contentSecurityPolicy: true,
         hidePoweredBy: true, // Always hide server info
-        noSniff: true, // Always prevent MIME sniffing
     };
 
     if (isDevelopment) {
         return helmet({
             ...baseConfig,
-            hsts: false, // No HTTPS enforcement in development
         });
     }
 
     // Production gets full security
     return helmet({
         ...baseConfig,
-        hsts: {
-            maxAge: 31536000,
-            includeSubDomains: true,
-            preload: true,
-        },
         frameguard: { action: "deny" },
         referrerPolicy: { policy: "no-referrer" },
     });

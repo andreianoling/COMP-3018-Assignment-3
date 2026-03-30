@@ -4,8 +4,13 @@ import morgan from "morgan";
 
 
 import { helmetConfig } from "../config/helmetConfig";
+import cors from "cors";
+import { corsOptions } from "../config/corsConfig";
+
 
 const app = express();
+
+app.use(cors(corsOptions()));
 
 app.use(helmetConfig());
 
