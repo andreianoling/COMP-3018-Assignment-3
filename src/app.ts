@@ -2,7 +2,12 @@ import express from "express";
 import router from "./api/v1/routes/postRoutes";
 import morgan from "morgan";
 
+
+import { helmetConfig } from "../config/helmetConfig";
+
 const app = express();
+
+app.use(helmetConfig());
 
 app.use(express.json());
 
