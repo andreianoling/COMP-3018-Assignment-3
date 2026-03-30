@@ -27,7 +27,7 @@ export const postSchemas = {
             status: Joi.string().valid("active", "cancelled", "completed").default("active").optional().messages({
                 "any.only": "\"status\" must be one of [active, cancelled, completed]",
             }),
-            category: Joi.string().valid("conference", "workshop", "meetup", "seminar", "general").default("general").optional().messages({
+            category: Joi.string().valid("conference", "workshop", "meetup", "seminar", "general").required().messages({
                 "any.only": "\"category\" must be one of [conference, workshop, meetup, seminar, general]",
             }),
         }),
