@@ -18,7 +18,6 @@ export const helmetConfig = () => {
     // Production gets full security
     return helmet({
         ...baseConfig,
-        frameguard: { action: "deny" },
         referrerPolicy: { policy: "no-referrer" },
     });
 };
