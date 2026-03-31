@@ -1,0 +1,469 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Task Management API Documentation",
+    "version": "1.0.0",
+    "description": "This is the API documentation for the Task Management application."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Post": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "date",
+          "capacity",
+          "category"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the event",
+            "example": "abc123"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Name of the event",
+            "example": "Node.js Workshop"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time of the event, must be in the future on create",
+            "example": "2026-06-15T10:00:00Z"
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": 5,
+            "description": "Maximum number of attendees",
+            "example": 50
+          },
+          "registrationCount": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "description": "Current number of registrations, cannot exceed capacity",
+            "example": 12
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "cancelled",
+              "completed"
+            ],
+            "default": "active",
+            "description": "Current status of the event",
+            "example": "active"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "conference",
+              "workshop",
+              "meetup",
+              "seminar",
+              "general"
+            ],
+            "description": "Category of the event",
+            "example": "workshop"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the event was created",
+            "example": "2026-01-15T10:30:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the event was last updated",
+            "example": "2026-01-20T14:45:00Z"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "A message describing the validation or not-found error",
+            "example": "Validation error: \"name\" is required, \"capacity\" must be an integer"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/events": {
+      "post": {
+        "summary": "Create a new event",
+        "tags": [
+          "Events"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "date",
+                  "capacity",
+                  "category"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "Test Workshop"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Must be a future date",
+                    "example": "2026-06-15T10:00:00Z"
+                  },
+                  "capacity": {
+                    "type": "integer",
+                    "minimum": 5,
+                    "example": 50
+                  },
+                  "registrationCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 0,
+                    "description": "Cannot exceed capacity",
+                    "example": 0
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "cancelled",
+                      "completed"
+                    ],
+                    "default": "active",
+                    "example": "active"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "conference",
+                      "workshop",
+                      "meetup",
+                      "seminar",
+                      "general"
+                    ],
+                    "example": "workshop"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Event created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve all events",
+        "tags": [
+          "Events"
+        ],
+        "responses": {
+          "200": {
+            "description": "Events retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Events retrieved"
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 3
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "posts": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Post"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/{id}": {
+      "get": {
+        "summary": "Retrieve a single event by ID",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The event ID",
+            "example": "abc123"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Event Retrieved"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "post": {
+                          "$ref": "#/components/schemas/Post"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing event",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The event ID",
+            "example": "abc123"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "minProperties": 1,
+                "description": "At least one field must be provided",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Updated Workshop"
+                  },
+                  "date": {
+                    "type": "string",
+                    "example": "2026-07-01T09:00:00Z"
+                  },
+                  "capacity": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "example": 100
+                  },
+                  "registrationCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 10
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "cancelled",
+                      "completed"
+                    ],
+                    "example": "cancelled"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "conference",
+                      "workshop",
+                      "meetup",
+                      "seminar",
+                      "general"
+                    ],
+                    "example": "seminar"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Event updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Event updated"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "updatedPost": {
+                          "$ref": "#/components/schemas/Post"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an event by ID",
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The event ID",
+            "example": "abc123"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Event deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
