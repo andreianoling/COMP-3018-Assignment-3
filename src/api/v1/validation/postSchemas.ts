@@ -1,6 +1,65 @@
 import Joi from "joi";
 
-// Post operation schemas organized by request part
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Post:
+ *       type: object
+ *       required:
+ *         - id
+ *         - name
+ *         - date
+ *         - capacity
+ *         - category
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique identifier for the event
+ *           example: "abc123"
+ *         name:
+ *           type: string
+ *           minLength: 3
+ *           description: Name of the event
+ *           example: "Node.js Workshop"
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time of the event, must be in the future on create
+ *           example: "2026-06-15T10:00:00Z"
+ *         capacity:
+ *           type: integer
+ *           minimum: 5
+ *           description: Maximum number of attendees
+ *           example: 50
+ *         registrationCount:
+ *           type: integer
+ *           minimum: 0
+ *           default: 0
+ *           description: Current number of registrations, cannot exceed capacity
+ *           example: 12
+ *         status:
+ *           type: string
+ *           enum: [active, cancelled, completed]
+ *           default: active
+ *           description: Current status of the event
+ *           example: "active"
+ *         category:
+ *           type: string
+ *           enum: [conference, workshop, meetup, seminar, general]
+ *           description: Category of the event
+ *           example: "workshop"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Timestamp when the event was created
+ *           example: "2026-01-15T10:30:00Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Timestamp when the event was last updated
+ *           example: "2026-01-20T14:45:00Z"
+ */
 export const postSchemas = {
     // POST /posts - Create new post
     create: {
@@ -76,3 +135,16 @@ export const postSchemas = {
         }),
     },
 };
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Error:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: A message describing the validation or not-found error
+ *           example: "Validation error: \"name\" is required, \"capacity\" must be an integer"
+ */
