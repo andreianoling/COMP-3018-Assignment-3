@@ -21,7 +21,7 @@ import Joi from "joi";
  *           type: string
  *           minLength: 3
  *           description: Name of the event
- *           example: "Node.js Workshop"
+ *           example: "Test Workshop"
  *         date:
  *           type: string
  *           format: date-time
